@@ -1,9 +1,8 @@
-﻿using DevExpress.XtraRichEdit.Model;
-using MongoDB.Driver;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Linq;
+using MongoDB.Driver;
 
-namespace gebase_alpha_0._2._1
+namespace gebase_0._2._2_alpha
 {
     static class Paycode
     {

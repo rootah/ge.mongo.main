@@ -1,20 +1,14 @@
-﻿using MongoDB.Driver;
-using MongoDB.Driver.Builders;
-using MongoDB.Driver.Linq;
-using System;
-using System.Windows.Forms;
-using System.Collections.Generic;
+﻿using System;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using DevExpress.Utils;
 using DevExpress.XtraBars;
 using MongoDB.Bson;
-using System.Data;
-using DevExpress.XtraGrid.Columns;
-using DevExpress.Utils;
+using MongoDB.Driver;
+using MongoDB.Driver.Builders;
+using MongoDB.Driver.Linq;
 
-namespace gebase_alpha_0._2._1
+namespace gebase_0._2._2_alpha
 {
     public class groupcode
     {
@@ -251,7 +245,7 @@ namespace gebase_alpha_0._2._1
 
         public static void GroupDetailView(MainAppForm mainapp)
         {
-            switch (gebase_0._2._2_alpha.Properties.Settings.Default.GroupDetailsShow)
+            switch (Properties.Settings.Default.GroupDetailsShow)
             {
                 case true:
                     mainapp.DetailGroupButton.Down = true;

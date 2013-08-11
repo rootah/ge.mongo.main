@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
 using DevExpress.LookAndFeel;
-using System.Globalization;
 
-namespace gebase_alpha_0._2._1
+namespace gebase_0._2._2_alpha
 {
     static class Program
     {

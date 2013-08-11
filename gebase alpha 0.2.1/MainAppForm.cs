@@ -1,18 +1,13 @@
-﻿using DevExpress.XtraBars;
-using DevExpress.XtraBars.Ribbon;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System;
 using System.Windows.Forms;
+using DevExpress.XtraBars;
+using DevExpress.XtraBars.Ribbon;
 
-
-namespace gebase_alpha_0._2._1
+namespace gebase_0._2._2_alpha
 {
     public partial class MainAppForm : RibbonForm
     {
         /*  MONGO VARS DECLARE */
-
-        public schedulercoll _schedentity;
 
         /*  END MONGO VARS DECLARE  */
 
@@ -28,43 +23,43 @@ namespace gebase_alpha_0._2._1
 
         private void ribbonControl_SelectedPageChanged(object sender, EventArgs e) /* COMPL */
         {
-            if (ribbonControl.SelectedPage.Text == "Payments")
+            if (ribbonControl.SelectedPage.Text == @"Payments")
             {
                 JRN.Visible = true;
-                gebase_0._2._2_alpha.Properties.Settings.Default.RibbonTabIndex = ribbonControl.SelectedPage.PageIndex;
+                Properties.Settings.Default.RibbonTabIndex = ribbonControl.SelectedPage.PageIndex;
                 xtraTabControl1.SelectedTabPageIndex = ribbonControl.SelectedPage.PageIndex;
             }
-            else if (ribbonControl.SelectedPage.Text == "incoming")
+            else if (ribbonControl.SelectedPage.Text == @"incoming")
             {
                 xtraTabControl1.SelectedTabPageIndex = 4;
             }
-            else if (ribbonControl.SelectedPage.Text == "outgoing")
+            else if (ribbonControl.SelectedPage.Text == @"outgoing")
             {
                 xtraTabControl1.SelectedTabPageIndex = 4;
             }
             else
             {
                 JRN.Visible = false;
-                gebase_0._2._2_alpha.Properties.Settings.Default.RibbonTabIndex = ribbonControl.SelectedPage.PageIndex;
+                Properties.Settings.Default.RibbonTabIndex = ribbonControl.SelectedPage.PageIndex;
                 xtraTabControl1.SelectedTabPageIndex = ribbonControl.SelectedPage.PageIndex;
             }
 
-            gebase_0._2._2_alpha.Properties.Settings.Default.Save();
+            Properties.Settings.Default.Save();
             RibbonTabRefresh(); 
         }
 
         private void RibbonTabRefresh()
         {
-            //try
-            //{
-            //    ribbonControl.SelectedPage = ribbonControl.Pages[Properties.Settings.Default.RibbonTabIndex];
-            //}
-            //catch
-            //{
-            //    ribbonControl.SelectedPage = ribbonControl.Pages[0];
-            //}
+            try
+            {
+                ribbonControl.SelectedPage = ribbonControl.Pages[Properties.Settings.Default.RibbonTabIndex];
+            }
+            catch
+            {
+                ribbonControl.SelectedPage = ribbonControl.Pages[0];
+            }
 
-            switch (gebase_0._2._2_alpha.Properties.Settings.Default.RibbonTabIndex)
+            switch (Properties.Settings.Default.RibbonTabIndex)
             {
                 case 0:
                     {
@@ -95,8 +90,6 @@ namespace gebase_alpha_0._2._1
                         Paycode.MongoInitiate(this);
                     }
                     break;
-                default:
-                    break;
             }
         }
 
@@ -108,9 +101,9 @@ namespace gebase_alpha_0._2._1
 
         private void ActiveGroupButton_DownChanged(object sender, ItemClickEventArgs e)
         {            
-            gebase_0._2._2_alpha.Properties.Settings.Default.GroupFilterFlag = "active";
+            Properties.Settings.Default.GroupFilterFlag = "active";
             //Properties.Settings.Default.CurrentGroupStatus = "active";
-            gebase_0._2._2_alpha.Properties.Settings.Default.Save();
+            Properties.Settings.Default.Save();
             groupcode.GroupGridRefresh(this);
             
             //bandedGroupGridView.FocusedRowHandle = 0;
@@ -120,9 +113,9 @@ namespace gebase_alpha_0._2._1
 
         private void AwaitingGroupButton_DownChanged(object sender, ItemClickEventArgs e)
         {
-            gebase_0._2._2_alpha.Properties.Settings.Default.GroupFilterFlag = "awaiting";
+            Properties.Settings.Default.GroupFilterFlag = "awaiting";
             //Properties.Settings.Default.CurrentGroupStatus = "awaiting";
-            gebase_0._2._2_alpha.Properties.Settings.Default.Save();
+            Properties.Settings.Default.Save();
             groupcode.GroupGridRefresh(this);
             
             //bandedGroupGridView.FocusedRowHandle = 0;
@@ -132,18 +125,18 @@ namespace gebase_alpha_0._2._1
 
         private void PausedGroupButton_DownChanged(object sender, ItemClickEventArgs e)
         {
-            gebase_0._2._2_alpha.Properties.Settings.Default.GroupFilterFlag = "paused";
+            Properties.Settings.Default.GroupFilterFlag = "paused";
             //Properties.Settings.Default.CurrentGroupStatus = "paused";
-            gebase_0._2._2_alpha.Properties.Settings.Default.Save();
+            Properties.Settings.Default.Save();
             groupcode.GroupGridRefresh(this);
             bandedGroupGridView_FocusedRowChanged(null, null);
         }
 
         private void FinishedGroupButton_DownChanged(object sender, ItemClickEventArgs e)
         {
-            gebase_0._2._2_alpha.Properties.Settings.Default.GroupFilterFlag = "finished";
+            Properties.Settings.Default.GroupFilterFlag = "finished";
             //Properties.Settings.Default.CurrentGroupStatus = "finished";
-            gebase_0._2._2_alpha.Properties.Settings.Default.Save();
+            Properties.Settings.Default.Save();
             groupcode.GroupGridRefresh(this);
             bandedGroupGridView_FocusedRowChanged(null, null);
         }
@@ -151,50 +144,50 @@ namespace gebase_alpha_0._2._1
         private void PauseGroupButton_ItemClick(object sender, ItemClickEventArgs e)
         {
             //int rowhandle = bandedGroupGridView.FocusedRowHandle;
-            string _id = bandedGroupGridView.GetRowCellValue(bandedGroupGridView.FocusedRowHandle, "_id").ToString();
+            string id = bandedGroupGridView.GetRowCellValue(bandedGroupGridView.FocusedRowHandle, "_id").ToString();
             string number = bandedGroupGridView.GetRowCellValue(bandedGroupGridView.FocusedRowHandle, "number").ToString();
-            groupcode.GroupAction(this, _id, "paused", number);
+            groupcode.GroupAction(this, id, "paused", number);
         }
 
         private void ResumeGroupButton_ItemClick(object sender, ItemClickEventArgs e)
         {
             //int rowhandle = bandedGroupGridView.FocusedRowHandle;
-            string _id = bandedGroupGridView.GetRowCellValue(bandedGroupGridView.FocusedRowHandle, "_id").ToString();
+            string id = bandedGroupGridView.GetRowCellValue(bandedGroupGridView.FocusedRowHandle, "_id").ToString();
             string number = bandedGroupGridView.GetRowCellValue(bandedGroupGridView.FocusedRowHandle, "number").ToString();
-            groupcode.GroupAction(this, _id, "active", number);
+            groupcode.GroupAction(this, id, "active", number);
         }
 
         private void StartGroupButton_ItemClick(object sender, ItemClickEventArgs e)
         {
             //int rowhandle = bandedGroupGridView.FocusedRowHandle;
-            string _id = bandedGroupGridView.GetRowCellValue(bandedGroupGridView.FocusedRowHandle, "_id").ToString();
+            string id = bandedGroupGridView.GetRowCellValue(bandedGroupGridView.FocusedRowHandle, "_id").ToString();
             string number = bandedGroupGridView.GetRowCellValue(bandedGroupGridView.FocusedRowHandle, "number").ToString();
-            groupcode.GroupAction(this, _id, "active", number);
+            groupcode.GroupAction(this, id, "active", number);
         }
 
         private void FinishGroupButton_ItemClick(object sender, ItemClickEventArgs e)
         {
             //int rowhandle = bandedGroupGridView.FocusedRowHandle;
-            string _id = bandedGroupGridView.GetRowCellValue(bandedGroupGridView.FocusedRowHandle, "_id").ToString();
+            string id = bandedGroupGridView.GetRowCellValue(bandedGroupGridView.FocusedRowHandle, "_id").ToString();
             string number = bandedGroupGridView.GetRowCellValue(bandedGroupGridView.FocusedRowHandle, "number").ToString();
-            groupcode.GroupAction(this, _id, "finished", number);
+            groupcode.GroupAction(this, id, "finished", number);
         }
 
         private void DeleteGroupButton_ItemClick(object sender, ItemClickEventArgs e)
         {
-            string _id = bandedGroupGridView.GetRowCellValue(bandedGroupGridView.FocusedRowHandle, "_id").ToString();
+            string id = bandedGroupGridView.GetRowCellValue(bandedGroupGridView.FocusedRowHandle, "_id").ToString();
             string number = bandedGroupGridView.GetRowCellValue(bandedGroupGridView.FocusedRowHandle, "number").ToString();
 
-            if (MessageBox.Show(String.Format("Group {0} will be deleted", number), "Confirm delete", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            if (MessageBox.Show(String.Format("Group {0} will be deleted", number), @"Confirm delete", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
-                groupcode.GroupDel(this, _id);
+                groupcode.GroupDel(this, id);
             }
         }
 
         private void AddGroupButton_ItemClick(object sender, ItemClickEventArgs e)
         {
-            gebase_0._2._2_alpha.Properties.Settings.Default.GroupFormType = "add";
-            using (groupform groupadd = new groupform(this) { StartPosition = FormStartPosition.CenterParent })
+            Properties.Settings.Default.GroupFormType = "add";
+            using (var groupadd = new groupform(this) { StartPosition = FormStartPosition.CenterParent })
             {
                 groupadd.simpleButtonOk.Visible = true;
                 groupadd.simpleButtonEdit.Visible = false;
@@ -204,8 +197,8 @@ namespace gebase_alpha_0._2._1
 
         private void EditGroupButton_ItemClick(object sender, ItemClickEventArgs e)
         {
-            gebase_0._2._2_alpha.Properties.Settings.Default.GroupFormType = "edit";
-            using (groupform groupadd = new groupform(this) { StartPosition = FormStartPosition.CenterParent })
+            Properties.Settings.Default.GroupFormType = "edit";
+            using (var groupadd = new groupform(this) { StartPosition = FormStartPosition.CenterParent })
             {
                 groupadd.simpleButtonOk.Visible = true;
                 groupadd.simpleButtonEdit.Visible = false;
@@ -245,50 +238,49 @@ namespace gebase_alpha_0._2._1
 
         private void AddStudentsButton_ItemClick(object sender, ItemClickEventArgs e)
         {
-            gebase_0._2._2_alpha.Properties.Settings.Default.StdFormType = "add";
-            stdform stdadd = new stdform(this);
-            stdadd.StartPosition = FormStartPosition.CenterParent;
-            stdadd.Text = stdadd.Text + " [new]";
+            Properties.Settings.Default.StdFormType = "add";
+            var stdadd = new stdform(this) {StartPosition = FormStartPosition.CenterParent};
+            stdadd.Text = stdadd.Text + @" [new]";
             stdadd.ShowDialog();
         }
 
         private void DeleteStudentButton_ItemClick(object sender, ItemClickEventArgs e)
         {
-            if (MessageBox.Show("Really delete?", "Confirm delete", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            if (MessageBox.Show(@"Really delete?", @"Confirm delete", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
-                string _id = bandedStudentsGridView.GetRowCellValue(bandedStudentsGridView.FocusedRowHandle, "_id").ToString();
-                stdcode.StdRemove(this, _id);
+                string id = bandedStudentsGridView.GetRowCellValue(bandedStudentsGridView.FocusedRowHandle, "_id").ToString();
+                stdcode.StdRemove(this, id);
             }
         }
 
         private void PauseStudentButton_ItemClick(object sender, ItemClickEventArgs e)
         {
-            string _id = bandedStudentsGridView.GetRowCellValue(bandedStudentsGridView.FocusedRowHandle, "_id").ToString();
-            stdcode.StdActionButton(this, _id, "paused");
+            string id = bandedStudentsGridView.GetRowCellValue(bandedStudentsGridView.FocusedRowHandle, "_id").ToString();
+            stdcode.StdActionButton(this, id, "paused");
         }
 
         private void ResumeStudentButton_ItemClick(object sender, ItemClickEventArgs e)
         {
-            string _id = bandedStudentsGridView.GetRowCellValue(bandedStudentsGridView.FocusedRowHandle, "_id").ToString();
-            stdcode.StdActionButton(this, _id, "active");
+            string id = bandedStudentsGridView.GetRowCellValue(bandedStudentsGridView.FocusedRowHandle, "_id").ToString();
+            stdcode.StdActionButton(this, id, "active");
         }
 
         private void StartStudentButton_ItemClick(object sender, ItemClickEventArgs e)
         {
-            string _id = bandedStudentsGridView.GetRowCellValue(bandedStudentsGridView.FocusedRowHandle, "_id").ToString();
-            stdcode.StdActionButton(this, _id, "active");
+            string id = bandedStudentsGridView.GetRowCellValue(bandedStudentsGridView.FocusedRowHandle, "_id").ToString();
+            stdcode.StdActionButton(this, id, "active");
         }
 
         private void FinishStudentButton_ItemClick(object sender, ItemClickEventArgs e)
         {
-            string _id = bandedStudentsGridView.GetRowCellValue(bandedStudentsGridView.FocusedRowHandle, "_id").ToString();
-            stdcode.StdActionButton(this, _id, "finished");
+            string id = bandedStudentsGridView.GetRowCellValue(bandedStudentsGridView.FocusedRowHandle, "_id").ToString();
+            stdcode.StdActionButton(this, id, "finished");
         }
 
         private void ActiveStudentsButton_DownChanged(object sender, ItemClickEventArgs e)
         {
-            gebase_0._2._2_alpha.Properties.Settings.Default.StdFilterFlag = "active";
-            gebase_0._2._2_alpha.Properties.Settings.Default.Save();
+            Properties.Settings.Default.StdFilterFlag = "active";
+            Properties.Settings.Default.Save();
 
             stdcode.StdGridRefresh(this);
             bandedStudentsGridView_FocusedRowChanged(null, null);
@@ -296,8 +288,8 @@ namespace gebase_alpha_0._2._1
 
         private void PausedStudentsButton_DownChanged(object sender, ItemClickEventArgs e)
         {
-            gebase_0._2._2_alpha.Properties.Settings.Default.StdFilterFlag = "paused";
-            gebase_0._2._2_alpha.Properties.Settings.Default.Save();
+            Properties.Settings.Default.StdFilterFlag = "paused";
+            Properties.Settings.Default.Save();
 
             stdcode.StdGridRefresh(this);
             bandedStudentsGridView_FocusedRowChanged(null, null);
@@ -305,8 +297,8 @@ namespace gebase_alpha_0._2._1
 
         private void AwaitingStudentsButton_DownChanged(object sender, ItemClickEventArgs e)
         {
-            gebase_0._2._2_alpha.Properties.Settings.Default.StdFilterFlag = "awaiting";
-            gebase_0._2._2_alpha.Properties.Settings.Default.Save();
+            Properties.Settings.Default.StdFilterFlag = "awaiting";
+            Properties.Settings.Default.Save();
 
             stdcode.StdGridRefresh(this);
             bandedStudentsGridView_FocusedRowChanged(null, null);
@@ -314,8 +306,8 @@ namespace gebase_alpha_0._2._1
 
         private void FinishedStudentsButton_DownChanged(object sender, ItemClickEventArgs e)
         {
-            gebase_0._2._2_alpha.Properties.Settings.Default.StdFilterFlag = "finished";
-            gebase_0._2._2_alpha.Properties.Settings.Default.Save();
+            Properties.Settings.Default.StdFilterFlag = "finished";
+            Properties.Settings.Default.Save();
 
             stdcode.StdGridRefresh(this);
             bandedStudentsGridView_FocusedRowChanged(null, null);
@@ -323,10 +315,9 @@ namespace gebase_alpha_0._2._1
 
         private void EditStudentButton_ItemClick(object sender, ItemClickEventArgs e)
         {
-            gebase_0._2._2_alpha.Properties.Settings.Default.StdFormType = "edit";
-            stdform stdadd = new stdform(this);
-            stdadd.StartPosition = FormStartPosition.CenterParent;
-            stdadd.Text = stdadd.Text + " [edit]";
+            Properties.Settings.Default.StdFormType = "edit";
+            var stdadd = new stdform(this) {StartPosition = FormStartPosition.CenterParent};
+            stdadd.Text = stdadd.Text + @" [edit]";
             
             stdadd.ShowDialog();
         }
@@ -354,10 +345,10 @@ namespace gebase_alpha_0._2._1
             try
             {
                 //Properties.Settings.Default.GroupSelectedRowIndex = bandedGroupGridView.FocusedRowHandle;
-                gebase_0._2._2_alpha.Properties.Settings.Default.CurrentGroupNumber = bandedGroupGridView.GetRowCellValue(bandedGroupGridView.FocusedRowHandle, "number").ToString();
+                Properties.Settings.Default.CurrentGroupNumber = bandedGroupGridView.GetRowCellValue(bandedGroupGridView.FocusedRowHandle, "number").ToString();
                 //Properties.Settings.Default.GroupFilterFlag = bandedGroupGridView.GetRowCellValue(bandedGroupGridView.FocusedRowHandle, "status").ToString();
                 //Properties.Settings.Default.CurrentGroupStatus = mainapp.bandedGroupGridView.GetRowCellValue(Properties.Settings.Default.GroupSelectedRowIndex, "status").ToString();
-                gebase_0._2._2_alpha.Properties.Settings.Default.Save();
+                Properties.Settings.Default.Save();
 
                 groupcode.ActionButtonSwitch(this);
             }
@@ -366,8 +357,8 @@ namespace gebase_alpha_0._2._1
             //}
             catch
             {
-                gebase_0._2._2_alpha.Properties.Settings.Default.CurrentGroupNumber = "";
-                gebase_0._2._2_alpha.Properties.Settings.Default.Save();
+                Properties.Settings.Default.CurrentGroupNumber = "";
+                Properties.Settings.Default.Save();
 
                 //stdcode.GroupDetails(this);
                 PauseGroupButton.Enabled = false;
@@ -385,21 +376,21 @@ namespace gebase_alpha_0._2._1
         {
             if (DetailGroupButton.Down)
             {
-                gebase_0._2._2_alpha.Properties.Settings.Default.GroupDetailsShow = true;
-                gebase_0._2._2_alpha.Properties.Settings.Default.Save();
+                Properties.Settings.Default.GroupDetailsShow = true;
+                Properties.Settings.Default.Save();
                 splitContainerControl1.PanelVisibility = DevExpress.XtraEditors.SplitPanelVisibility.Both;
 
                 DetailGroupGridViewColHide();
             }
             else
             {
-                gebase_0._2._2_alpha.Properties.Settings.Default.GroupDetailsShow = false;
-                gebase_0._2._2_alpha.Properties.Settings.Default.Save();
+                Properties.Settings.Default.GroupDetailsShow = false;
+                Properties.Settings.Default.Save();
                 splitContainerControl1.PanelVisibility = DevExpress.XtraEditors.SplitPanelVisibility.Panel1;
             }
         }
 
-        public void DetailGroupGridViewColHide()
+        private void DetailGroupGridViewColHide()
         {
             int i = 0;
 

@@ -1,15 +1,11 @@
-﻿using DevExpress.XtraEditors;
-using MongoDB.Driver;
-using MongoDB.Driver.Builders;
-using MongoDB.Bson;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using MongoDB.Bson;
+using MongoDB.Driver;
+using MongoDB.Driver.Builders;
 
-namespace gebase_alpha_0._2._1
+namespace gebase_0._2._2_alpha
 {
     class stdcode
     {

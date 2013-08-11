@@ -1,4 +1,4 @@
-﻿namespace gebase_alpha_0._2._1
+﻿namespace gebase_0._2._2_alpha
 {
     partial class groupform
     {

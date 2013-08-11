@@ -1,4 +1,4 @@
-﻿namespace gebase_alpha_0._2._1
+﻿namespace gebase_0._2._2_alpha
 {
     partial class MainAppForm
     {
@@ -28,15 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainAppForm));
-            DevExpress.XtraScheduler.TimeRuler timeRuler3 = new DevExpress.XtraScheduler.TimeRuler();
-            DevExpress.XtraScheduler.TimeRuler timeRuler4 = new DevExpress.XtraScheduler.TimeRuler();
+            DevExpress.XtraScheduler.TimeRuler timeRuler1 = new DevExpress.XtraScheduler.TimeRuler();
+            DevExpress.XtraScheduler.TimeRuler timeRuler2 = new DevExpress.XtraScheduler.TimeRuler();
             this.ribbonControl = new DevExpress.XtraBars.Ribbon.RibbonControl();
             this.backstageViewControl1 = new DevExpress.XtraBars.Ribbon.BackstageViewControl();
             this.backstageViewItemSeparator1 = new DevExpress.XtraBars.Ribbon.BackstageViewItemSeparator();
             this.backstageExitButton = new DevExpress.XtraBars.Ribbon.BackstageViewButtonItem();
-            this.ribbonImageCollection = new DevExpress.Utils.ImageCollection(this.components);
+            this.ribbonImageCollection = new DevExpress.Utils.ImageCollection();
             this.ActiveGroupButton = new DevExpress.XtraBars.BarButtonItem();
             this.AwaitingGroupButton = new DevExpress.XtraBars.BarButtonItem();
             this.PausedGroupButton = new DevExpress.XtraBars.BarButtonItem();
@@ -88,7 +87,7 @@
             this.barEditItem2 = new DevExpress.XtraBars.BarEditItem();
             this.repositoryItemSearchLookUpEdit1 = new DevExpress.XtraEditors.Repository.RepositoryItemSearchLookUpEdit();
             this.repositoryItemSearchLookUpEdit1View = new DevExpress.XtraGrid.Views.Grid.GridView();
-            this.ribbonImageCollectionLarge = new DevExpress.Utils.ImageCollection(this.components);
+            this.ribbonImageCollectionLarge = new DevExpress.Utils.ImageCollection();
             this.JRN = new DevExpress.XtraBars.Ribbon.RibbonPageCategory();
             this.ribbonPage1 = new DevExpress.XtraBars.Ribbon.RibbonPage();
             this.ribbonPageGroup7 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
@@ -110,7 +109,7 @@
             this.repositoryItemColorEdit1 = new DevExpress.XtraEditors.Repository.RepositoryItemColorEdit();
             this.repositoryItemLookUpEdit1 = new DevExpress.XtraEditors.Repository.RepositoryItemLookUpEdit();
             this.ribbonStatusBarM = new DevExpress.XtraBars.Ribbon.RibbonStatusBar();
-            this.defaultLookAndFeel1 = new DevExpress.LookAndFeel.DefaultLookAndFeel(this.components);
+            this.defaultLookAndFeel1 = new DevExpress.LookAndFeel.DefaultLookAndFeel();
             this.xtraTabControl1 = new DevExpress.XtraTab.XtraTabControl();
             this.xtraTabPage1 = new DevExpress.XtraTab.XtraTabPage();
             this.splitContainerControl1 = new DevExpress.XtraEditors.SplitContainerControl();
@@ -126,7 +125,7 @@
             this.gridBand2 = new DevExpress.XtraGrid.Views.BandedGrid.GridBand();
             this.xtraTabPage3 = new DevExpress.XtraTab.XtraTabPage();
             this.SchedGrid = new DevExpress.XtraScheduler.SchedulerControl();
-            this.GESchedulerStorage = new DevExpress.XtraScheduler.SchedulerStorage(this.components);
+            this.GESchedulerStorage = new DevExpress.XtraScheduler.SchedulerStorage();
             this.xtraTabPage4 = new DevExpress.XtraTab.XtraTabPage();
             this.splitContainerControl2 = new DevExpress.XtraEditors.SplitContainerControl();
             this.gridPayments = new DevExpress.XtraGrid.GridControl();
@@ -1202,7 +1201,7 @@
             this.SchedGrid.Storage = this.GESchedulerStorage;
             this.SchedGrid.TabIndex = 0;
             this.SchedGrid.Text = "schedulerControl1";
-            this.SchedGrid.Views.DayView.TimeRulers.Add(timeRuler3);
+            this.SchedGrid.Views.DayView.TimeRulers.Add(timeRuler1);
             this.SchedGrid.Views.GanttView.Enabled = false;
             this.SchedGrid.Views.WorkWeekView.NavigationButtonVisibility = DevExpress.XtraScheduler.NavigationButtonVisibility.Never;
             this.SchedGrid.Views.WorkWeekView.RowHeight = 1;
@@ -1210,9 +1209,9 @@
             this.SchedGrid.Views.WorkWeekView.ShowFullWeek = true;
             this.SchedGrid.Views.WorkWeekView.ShowMoreButtons = false;
             this.SchedGrid.Views.WorkWeekView.ShowWorkTimeOnly = true;
-            timeRuler4.AdjustForDaylightSavingTime = false;
-            timeRuler4.ShowCurrentTime = false;
-            this.SchedGrid.Views.WorkWeekView.TimeRulers.Add(timeRuler4);
+            timeRuler2.AdjustForDaylightSavingTime = false;
+            timeRuler2.ShowCurrentTime = false;
+            this.SchedGrid.Views.WorkWeekView.TimeRulers.Add(timeRuler2);
             this.SchedGrid.Views.WorkWeekView.TimeScale = System.TimeSpan.Parse("01:00:00");
             this.SchedGrid.Views.WorkWeekView.WorkTime.End = System.TimeSpan.Parse("21:30:00");
             this.SchedGrid.Views.WorkWeekView.WorkTime.Start = System.TimeSpan.Parse("11:00:00");
@@ -1360,7 +1359,7 @@
             this.Name = "MainAppForm";
             this.Ribbon = this.ribbonControl;
             this.StatusBar = this.ribbonStatusBarM;
-            this.Text = "GEBase Alpha 0.2.1 / Batman tribute";
+            this.Text = "GEBase \"Batman\" 0.2.2";
             this.Load += new System.EventHandler(this.MainAppForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.ribbonControl)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ribbonImageCollection)).EndInit();
