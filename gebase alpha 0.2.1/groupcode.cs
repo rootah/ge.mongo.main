@@ -12,13 +12,12 @@ namespace gebase_0._2._2_alpha
 {
     public class groupcode
     {
-        public static string connectionString;
-        public static MongoClient client;
-        public static MongoServer server;
-        public static MongoDatabase gebase;
-        public static MongoCollection<groupcolls> groupcollection;
-
-        public groupcolls _groupentity;
+        private static string _connectionString;
+        private static MongoClient _client;
+        private static MongoServer _server;
+        private static MongoDatabase _gebase;
+// ReSharper disable once NotAccessedField.Local
+        private static MongoCollection<groupcolls> _groupcollection;
 
         public static void GroupGridColHide(MainAppForm mainapp)
         {
@@ -40,11 +39,11 @@ namespace gebase_0._2._2_alpha
 
         public static void MongoInitiate() /* COMPL */
         {
-            connectionString = gebase_0._2._2_alpha.Properties.Settings.Default.ServerOne/* + "," + Properties.Settings.Default.ServerTwo + "/?connect=replicaset"*/;
-            client = new MongoClient(connectionString);
-            server = client.GetServer();
-            gebase = server.GetDatabase("gebase");
-            groupcollection = gebase.GetCollection<groupcolls>("groups");
+            _connectionString = Properties.Settings.Default.ServerOne/* + "," + Properties.Settings.Default.ServerTwo + "/?connect=replicaset"*/;
+            _client = new MongoClient(_connectionString);
+            _server = _client.GetServer();
+            _gebase = _server.GetDatabase("gebase");
+            _groupcollection = _gebase.GetCollection<groupcolls>("groups");
         }
 
         //public static void GroupGridUnsortedRefreshFilter(MainAppForm mainapp)
@@ -69,7 +68,7 @@ namespace gebase_0._2._2_alpha
 
         public static void ActionButtonSwitch(MainAppForm mainapp)
         {
-            string groupstatus = gebase_0._2._2_alpha.Properties.Settings.Default.GroupFilterFlag;
+            string groupstatus = Properties.Settings.Default.GroupFilterFlag;
 
             switch (groupstatus)
             {
@@ -108,19 +107,19 @@ namespace gebase_0._2._2_alpha
             }
         }
 
-        public static void GroupAction(MainAppForm mainapp, string _id, string groupstatus, string number)
+        public static void GroupAction(MainAppForm mainapp, string id, string groupstatus, string number)
         {
 
             //BindingList<groupcolls> grouplist = mainapp.gridGroup.DataSource as BindingList<groupcolls>;
             //groupcolls _groupentity = grouplist[rowhandle];
 
-            gebase.GetCollection<groupcolls>("groups").Update(
-                Query.EQ("_id", ObjectId.Parse(_id)),
-                MongoDB.Driver.Builders.Update.Set("status", groupstatus));
+            _gebase.GetCollection<groupcolls>("groups").Update(
+                Query.EQ("_id", ObjectId.Parse(id)),
+                Update.Set("status", groupstatus));
 
             GroupGridRefresh(mainapp);
 
-            mainapp.StatusEventsText.Caption = "Group " + number + " state changed to " + groupstatus.ToUpper();
+            mainapp.StatusEventsText.Caption = @"Group " + number + @" state changed to " + groupstatus.ToUpper();
             mainapp.StatusEventsText.Visibility = BarItemVisibility.Always;
 
             //mainapp.bandedGroupGridView.FocusedRowHandle = Properties.Settings.Default.GroupSelectedRowIndex;
@@ -168,47 +167,46 @@ namespace gebase_0._2._2_alpha
 
         public static void GroupStdCount(MainAppForm mainapp)
         {
-            stdcode.MongoInitiate(mainapp);
+            Stdcode.MongoInitiate(mainapp);
 
             var query =
-                from e in gebase.GetCollection<groupcolls>("groups").AsQueryable<groupcolls>()
+                from e in _gebase.GetCollection<groupcolls>("groups").AsQueryable<groupcolls>()
                 select e.number;
 
             foreach (var number in query)
             {
-                int stdcount = Convert.ToInt16(stdcode.gebase.GetCollection<stdcoll>("stds").FindAs<stdcoll>(Query.EQ("group", number)).Count());
+                int stdcount = Convert.ToInt16(Stdcode.Gebase.GetCollection<stdcoll>("stds").FindAs<stdcoll>(Query.EQ("group", number)).Count());
 
-                gebase.GetCollection<groupcolls>("groups").Update(
+                _gebase.GetCollection<groupcolls>("groups").Update(
                 Query.EQ("number", number),
-                MongoDB.Driver.Builders.Update.Set("stdcount", stdcount));
+                Update.Set("stdcount", stdcount));
             }
         }
 
         public static void GroupGridRefresh(MainAppForm mainapp)
         {
-            var query = Query.EQ("status", gebase_0._2._2_alpha.Properties.Settings.Default.GroupFilterFlag);
+            var query = Query.EQ("status", Properties.Settings.Default.GroupFilterFlag);
 
-            BindingList<groupcolls> groupresult = new BindingList<groupcolls>(gebase.GetCollection<groupcolls>("groups").Find(query).ToList());
+            var groupresult = new BindingList<groupcolls>(_gebase.GetCollection<groupcolls>("groups").Find(query).ToList());
             mainapp.gridGroup.DataSource = groupresult;
 
             int count = Convert.ToInt16(groupresult.Count());
-            mainapp.ItemsCountStatusText.Caption = Convert.ToString(gebase_0._2._2_alpha.Properties.Settings.Default.GroupFilterFlag) + " groups count: " + Convert.ToString(count);
-            mainapp.bandedGroupGridView.GroupPanelText = Convert.ToString(gebase_0._2._2_alpha.Properties.Settings.Default.GroupFilterFlag) + " groups list";
+            mainapp.ItemsCountStatusText.Caption = Convert.ToString(Properties.Settings.Default.GroupFilterFlag) + @" groups count: " + Convert.ToString(count);
+            mainapp.bandedGroupGridView.GroupPanelText = Convert.ToString(Properties.Settings.Default.GroupFilterFlag) + @" groups list";
         }
 
-        public static void GroupDel(MainAppForm mainapp, string _id)
+        public static void GroupDel(MainAppForm mainapp, string id)
         {
-            gebase.GetCollection<groupcolls>("groups").Remove(
-                Query.EQ("_id", ObjectId.Parse(_id)));
+            _gebase.GetCollection<groupcolls>("groups").Remove(
+                Query.EQ("_id", ObjectId.Parse(id)));
+            GroupGridRefresh(mainapp);
 
-            groupcode.GroupGridRefresh(mainapp);
-
-            mainapp.bandedGroupGridView.FocusedRowHandle = gebase_0._2._2_alpha.Properties.Settings.Default.GroupSelectedRowIndex;
+            mainapp.bandedGroupGridView.FocusedRowHandle = Properties.Settings.Default.GroupSelectedRowIndex;
         }
 
         public static void GroupTabShow(MainAppForm mainapp)
         {
-            switch (gebase_0._2._2_alpha.Properties.Settings.Default.GroupFilterFlag)
+            switch (Properties.Settings.Default.GroupFilterFlag)
             {
                 case "active":
                     mainapp.ActiveGroupButton.Down = true;
@@ -228,7 +226,7 @@ namespace gebase_0._2._2_alpha
                     break;
             }
 
-            switch (gebase_0._2._2_alpha.Properties.Settings.Default.GroupDetailsShow)
+            switch (Properties.Settings.Default.GroupDetailsShow)
             {
                 case true:
                     mainapp.DetailGroupButton.Down = true;
@@ -243,6 +241,7 @@ namespace gebase_0._2._2_alpha
             GroupGridRefresh(mainapp);
         }
 
+// ReSharper disable once UnusedMember.Global
         public static void GroupDetailView(MainAppForm mainapp)
         {
             switch (Properties.Settings.Default.GroupDetailsShow)
@@ -258,6 +257,8 @@ namespace gebase_0._2._2_alpha
             }
         }
 
+// ReSharper disable once UnusedMember.Global
+// ReSharper disable once UnusedParameter.Global
         public static void GetCurrentGroupData(MainAppForm mainapp)
         {
             //Properties.Settings.Default.CurrentGroupNumber = mainapp.bandedGroupGridView.GetRowCellValue(Properties.Settings.Default.GroupSelectedRowIndex, "number").ToString();

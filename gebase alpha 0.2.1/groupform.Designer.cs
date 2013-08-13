@@ -1,6 +1,6 @@
 ﻿namespace gebase_0._2._2_alpha
 {
-    partial class groupform
+    partial class Groupform
     {
         /// <summary>
         /// Required designer variable.

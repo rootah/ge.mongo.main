@@ -1,6 +1,6 @@
 ﻿namespace gebase_0._2._2_alpha
 {
-    partial class stdform
+    partial class Stdform
     {
         /// <summary>
         /// Required designer variable.

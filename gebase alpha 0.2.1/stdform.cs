@@ -8,35 +8,35 @@ using MongoDB.Driver.Builders;
 
 namespace gebase_0._2._2_alpha
 {
-    public partial class stdform : XtraForm
+    public partial class Stdform : XtraForm
     {
-        private readonly MainAppForm mainapp;
-        public int state = 0;
+        private readonly MainAppForm _mainapp;
+        private int _state;
 
-        public stdform(MainAppForm mainform)
+        public Stdform(MainAppForm mainform)
         {
             InitializeComponent();
-            mainapp = mainform;
+            _mainapp = mainform;
         }
 
         /* COMPLETED */
 
-        private void hphone_Enter(object sender, EventArgs e)
+// ReSharper disable once UnusedMember.Local
+        private void hphone_Enter()
         {
-            //hphone.BeginInvoke(new MethodInvoker(delegate
-            //{
-                hphone.SelectionLength = hphone.Text.Length;
-                hphone.SelectionStart = 5;
-            //}));
+            hphone.SelectionLength = hphone.Text.Length;
+            hphone.SelectionStart = 5;
         }
 
-        private void mphone_Enter(object sender, EventArgs e)
+// ReSharper disable once UnusedMember.Local
+        private void mphone_Enter()
         {
                 mphone.SelectionLength = mphone.Text.Length;
                 mphone.SelectionStart = 0;
         }
 
-        private void addphone_Enter(object sender, EventArgs e)
+// ReSharper disable once UnusedMember.Local
+        private void addphone_Enter()
         {
                 addphone.SelectionLength = addphone.Text.Length;
                 addphone.SelectionStart = 0;
@@ -54,21 +54,19 @@ namespace gebase_0._2._2_alpha
 
         private void morebutton_Click(object sender, EventArgs e)
         {
-            switch (state)
+            switch (_state)
             {
                 case 0:
                     {
                         Height = 522;
-                        state = 1;
+                        _state = 1;
                     }
                     break;
                 case 1:
                     {
                         Height = 380;
-                        state = 0;
+                        _state = 0;
                     }
-                    break;
-                default:
                     break;
             }
         }
@@ -77,17 +75,17 @@ namespace gebase_0._2._2_alpha
 
         private void studentform_Load(object sender, EventArgs e)
         {
-            switch (gebase_0._2._2_alpha.Properties.Settings.Default.StdFormType)
+            switch (Properties.Settings.Default.StdFormType)
             {
                 case "add":
                     {
-                        stdcode.MongoInitiate(mainapp);
-                        stdcode.GroupComboListFill(this);
+                        Stdcode.MongoInitiate(_mainapp);
+                        Stdcode.GroupComboListFill(this);
 
-                        cost.Text = "15000";
+                        cost.Text = @"15000";
                         acceptdate.DateTime = DateTime.Now.Date;
 
-                        mainapp.bandedStudentsGridView.Columns[0].Width = 200;
+                        _mainapp.bandedStudentsGridView.Columns[0].Width = 200;
                         editokbutton.Visible = false;
                         addokbutton.Visible = true;
                     }
@@ -95,15 +93,13 @@ namespace gebase_0._2._2_alpha
                 case "edit":
                     {
                         //stdcode.MongoInitiate(mainapp);
-                        stdcode.GroupComboListFill(this);
+                        Stdcode.GroupComboListFill(this);
 
-                        int rowindex = mainapp.bandedStudentsGridView.FocusedRowHandle;
-                        StdEditFormFill(mainapp, rowindex);
+                        int rowindex = _mainapp.bandedStudentsGridView.FocusedRowHandle;
+                        StdEditFormFill(_mainapp, rowindex);
                         editokbutton.Visible = true;
                         addokbutton.Visible = false;
                     }
-                    break;
-                default:
                     break;
             }
         }
@@ -111,29 +107,29 @@ namespace gebase_0._2._2_alpha
         private void addokbutton_Click(object sender, EventArgs e)
         {
             var query = Query.EQ("fullname", String.Format("{0} {1}", lname.Text, fname.Text));
-            int exist = Convert.ToInt16(stdcode.gebase.GetCollection<stdcoll>("stds").Find(query).Count());
+            int exist = Convert.ToInt16(Stdcode.Gebase.GetCollection<stdcoll>("stds").Find(query).Count());
             if (exist > 0)
             {
-                MessageBox.Show("Same user exist! Check fields pls.");
+                MessageBox.Show(@"Same user exist! Check fields pls.");
                 return;
             }
             
-            stdcode._stdentity = new stdcoll();
-            stdcoll _stdnew = stdcode._stdentity;
+            Stdcode._stdentity = new stdcoll();
+            stdcoll stdnew = Stdcode._stdentity;
 
             {
-                _stdnew.fname = fname.Text;
-                _stdnew.lname = lname.Text;
-                _stdnew.fullname = String.Format("{0} {1}", lname.Text, fname.Text);
-                _stdnew.email = email.Text;
-                _stdnew.mphone = mphone.Text;
-                _stdnew.hphone = hphone.Text;
-                _stdnew.addphone = addphone.Text;
-                _stdnew.level = level.Text;
-                _stdnew.group = stgroup.Text;
-                _stdnew.cost = Convert.ToInt32(cost.Text);
-                _stdnew.topay = Convert.ToInt32(cost.Text);
-                _stdnew.status = status.Text;
+                stdnew.fname = fname.Text;
+                stdnew.lname = lname.Text;
+                stdnew.fullname = String.Format("{0} {1}", lname.Text, fname.Text);
+                stdnew.email = email.Text;
+                stdnew.mphone = mphone.Text;
+                stdnew.hphone = hphone.Text;
+                stdnew.addphone = addphone.Text;
+                stdnew.level = level.Text;
+                stdnew.group = stgroup.Text;
+                stdnew.cost = Convert.ToInt32(cost.Text);
+                stdnew.topay = Convert.ToInt32(cost.Text);
+                stdnew.status = status.Text;
 
                 //if (individualcheck.Checked)
                 //{
@@ -150,17 +146,17 @@ namespace gebase_0._2._2_alpha
                 //    _stdnew.isintensive = true;
                 //else _stdnew.isintensive = false;
 
-                _stdnew.accepted = acceptdate.DateTime;
-                _stdnew.daysposs = possdays.Text;
-                _stdnew.timeposs = posstime.Text;
-                _stdnew.source = source.Text;
+                stdnew.accepted = acceptdate.DateTime;
+                stdnew.daysposs = possdays.Text;
+                stdnew.timeposs = posstime.Text;
+                stdnew.source = source.Text;
             }
 
-            stdcode.stdcollection.Insert(stdcode._stdentity);
-            stdcode.StdGridRefresh(mainapp);
+            Stdcode.Stdcollection.Insert(Stdcode._stdentity);
+            Stdcode.StdGridRefresh(_mainapp);
 
             groupcode.MongoInitiate();
-            groupcode.GroupStdCount(mainapp);
+            groupcode.GroupStdCount(_mainapp);
 
             Close();
         }
@@ -196,10 +192,10 @@ namespace gebase_0._2._2_alpha
 
         private void editokbutton_Click(object sender, EventArgs e)
         {
-            string _id = mainapp.bandedStudentsGridView.GetRowCellValue(mainapp.bandedStudentsGridView.FocusedRowHandle, "_id").ToString();
+            string id = _mainapp.bandedStudentsGridView.GetRowCellValue(_mainapp.bandedStudentsGridView.FocusedRowHandle, "_id").ToString();
 
-            stdcode.stdcollection.Update(
-                Query.EQ("_id", ObjectId.Parse(_id)),
+            Stdcode.Stdcollection.Update(
+                Query.EQ("_id", ObjectId.Parse(id)),
                 MongoDB.Driver.Builders.Update
                 .Set("fname", fname.Text)
                 .Set("lname", lname.Text)
@@ -220,9 +216,9 @@ namespace gebase_0._2._2_alpha
                 //.Set("isindividual", individualcheck.Checked));
 
             //Properties.Settings.Default.StdFilterFlag = status.Text;
-            stdcode.StdGridRefresh(mainapp);
+            Stdcode.StdGridRefresh(_mainapp);
             groupcode.MongoInitiate();
-            groupcode.GroupStdCount(mainapp);
+            groupcode.GroupStdCount(_mainapp);
             Close();
         }
 

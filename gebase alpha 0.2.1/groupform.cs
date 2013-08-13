@@ -7,32 +7,32 @@ using MongoDB.Driver.Builders;
 
 namespace gebase_0._2._2_alpha
 {
-    public partial class groupform : DevExpress.XtraEditors.XtraForm
+    public partial class Groupform : DevExpress.XtraEditors.XtraForm
     {
-        public int state = 0;
-        private MainAppForm mainapp;
+        private int _state;
+        private readonly MainAppForm _mainapp;
 
-        public const string connectionString = "mongodb://localhost";
-        public static MongoClient client = new MongoClient(connectionString);
-        public static MongoServer server = client.GetServer();
-        public static MongoDatabase gebase = server.GetDatabase("gebase");
-        MongoCollection<groupcolls> groupcollection = gebase.GetCollection<groupcolls>("groups");
-        
-        public groupcolls _groupentity;
+        private const string ConnectionString = "mongodb://localhost";
+        private static readonly MongoClient Client = new MongoClient(ConnectionString);
+        private static readonly MongoServer Server = Client.GetServer();
+        private static readonly MongoDatabase Gebase = Server.GetDatabase("gebase");
+        readonly MongoCollection<groupcolls> _groupcollection = Gebase.GetCollection<groupcolls>("groups");
 
-        public groupform(MainAppForm mainform)
+        private groupcolls _groupentity;
+
+        public Groupform(MainAppForm mainform)
         {
             InitializeComponent();
-            mainapp = mainform;
+            _mainapp = mainform;
         }
 
         private void groupform_Load(object sender, EventArgs e)
         {
-            switch (gebase_0._2._2_alpha.Properties.Settings.Default.GroupFormType)
+            switch (Properties.Settings.Default.GroupFormType)
             {
                 case "add":
                     {
-                        this.Text = "group [add]";
+                        Text = @"group [add]";
                         simpleButtonEdit.Visible = false;
                         simpleButtonOk.Visible = true;
                         NewGroupNumber();
@@ -41,28 +41,28 @@ namespace gebase_0._2._2_alpha
                 case "edit":
                     {
                         //if (mainapp._groupentity.time == "... custom")
-                        if (mainapp.bandedGroupGridView.GetRowCellValue(mainapp.bandedGroupGridView.FocusedRowHandle, "time").ToString() == "... custom")
+                        if (_mainapp.bandedGroupGridView.GetRowCellValue(_mainapp.bandedGroupGridView.FocusedRowHandle, "time").ToString() == "... custom")
                         {
                             textEditGtime.EditValue = null;
-                            this.Height = 361; state = 1;
+                            Height = 361; _state = 1;
                         }
                         else
                         {
-                            textEditGtime.Time = Convert.ToDateTime(mainapp.bandedGroupGridView.GetRowCellValue(mainapp.bandedGroupGridView.FocusedRowHandle, "time").ToString());
-                            this.Height = 224; state = 0;
+                            textEditGtime.Time = Convert.ToDateTime(_mainapp.bandedGroupGridView.GetRowCellValue(_mainapp.bandedGroupGridView.FocusedRowHandle, "time").ToString());
+                            Height = 224; _state = 0;
                         }
 
-                        this.Text = "group [edit : " + Convert.ToString(mainapp.bandedGroupGridView.GetRowCellValue(mainapp.bandedGroupGridView.FocusedRowHandle, "number").ToString()) + "]";
+                        Text = string.Format(@"group [edit : {0}]", Convert.ToString(_mainapp.bandedGroupGridView.GetRowCellValue(_mainapp.bandedGroupGridView.FocusedRowHandle, "number").ToString()));
                         simpleButtonEdit.Visible = true;
                         simpleButtonOk.Visible = false;
 
-                        textEditGnum.Text = mainapp.bandedGroupGridView.GetRowCellValue(mainapp.bandedGroupGridView.FocusedRowHandle, "number").ToString();
-                        textEditGteacher.Text = mainapp.bandedGroupGridView.GetRowCellValue(mainapp.bandedGroupGridView.FocusedRowHandle, "teacher").ToString();
-                        textEditGlevel.Text = mainapp.bandedGroupGridView.GetRowCellValue(mainapp.bandedGroupGridView.FocusedRowHandle, "level").ToString();
-                        textEditGdays.Text = mainapp.bandedGroupGridView.GetRowCellValue(mainapp.bandedGroupGridView.FocusedRowHandle, "days").ToString();
-                        checkedhours.Text = mainapp.bandedGroupGridView.GetRowCellValue(mainapp.bandedGroupGridView.FocusedRowHandle, "hours").ToString();
-                        textEditGstatus.Text = mainapp.bandedGroupGridView.GetRowCellValue(mainapp.bandedGroupGridView.FocusedRowHandle, "status").ToString();
-                        textEditGstart.Text = mainapp.bandedGroupGridView.GetRowCellValue(mainapp.bandedGroupGridView.FocusedRowHandle, "start").ToString();
+                        textEditGnum.Text = _mainapp.bandedGroupGridView.GetRowCellValue(_mainapp.bandedGroupGridView.FocusedRowHandle, "number").ToString();
+                        textEditGteacher.Text = _mainapp.bandedGroupGridView.GetRowCellValue(_mainapp.bandedGroupGridView.FocusedRowHandle, "teacher").ToString();
+                        textEditGlevel.Text = _mainapp.bandedGroupGridView.GetRowCellValue(_mainapp.bandedGroupGridView.FocusedRowHandle, "level").ToString();
+                        textEditGdays.Text = _mainapp.bandedGroupGridView.GetRowCellValue(_mainapp.bandedGroupGridView.FocusedRowHandle, "days").ToString();
+                        checkedhours.Text = _mainapp.bandedGroupGridView.GetRowCellValue(_mainapp.bandedGroupGridView.FocusedRowHandle, "hours").ToString();
+                        textEditGstatus.Text = _mainapp.bandedGroupGridView.GetRowCellValue(_mainapp.bandedGroupGridView.FocusedRowHandle, "status").ToString();
+                        textEditGstart.Text = _mainapp.bandedGroupGridView.GetRowCellValue(_mainapp.bandedGroupGridView.FocusedRowHandle, "start").ToString();
 
                         textEditGdays_Properties_EditValueChanged(null, null);
                         CustomTimeGet();
@@ -73,26 +73,26 @@ namespace gebase_0._2._2_alpha
 
         private void CustomTimeButton_Click(object sender, EventArgs e)
         {
-            switch (gebase_0._2._2_alpha.Properties.Settings.Default.GroupFormType)
+            switch (Properties.Settings.Default.GroupFormType)
             {
                 case "edit":
                     {
-                        switch (state)
+                        switch (_state)
                         {
                             case 0:
                                 {
                                     textEditGtime.EditValue = null;
 
-                                    this.Height = 361; state = 1;
+                                    Height = 361; _state = 1;
                                     CustomTimeGet();
                                 }
                                 break;
 
                             case 1:
                                 {
-                                    this.Height = 224; state = 0;
-                                    if (mainapp.bandedGroupGridView.GetRowCellValue(mainapp.bandedGroupGridView.FocusedRowHandle, "time").ToString() != "... custom")
-                                        textEditGtime.Time = Convert.ToDateTime(mainapp.bandedGroupGridView.GetRowCellValue(mainapp.bandedGroupGridView.FocusedRowHandle, "time").ToString());
+                                    Height = 224; _state = 0;
+                                    if (_mainapp.bandedGroupGridView.GetRowCellValue(_mainapp.bandedGroupGridView.FocusedRowHandle, "time").ToString() != "... custom")
+                                        textEditGtime.Time = Convert.ToDateTime(_mainapp.bandedGroupGridView.GetRowCellValue(_mainapp.bandedGroupGridView.FocusedRowHandle, "time").ToString());
                                     else textEditGtime.EditValue = null;
                                 }
                                 break;
@@ -101,19 +101,19 @@ namespace gebase_0._2._2_alpha
                     break;
                 case "add":
                     {
-                        switch (state)
+                        switch (_state)
                         {
                             case 0:
                                 {
                                     textEditGtime.EditValue = null;
 
-                                    this.Height = 361; state = 1;
+                                    Height = 361; _state = 1;
                                 }
                                 break;
 
                             case 1:
                                 {
-                                    this.Height = 224; state = 0;
+                                    Height = 224; _state = 0;
                                 }
                                 break;
                         }
@@ -138,8 +138,8 @@ namespace gebase_0._2._2_alpha
                 groupkind = "sametime";
             }
 
-            gebase.GetCollection<groupcolls>("groups").Update(
-                Query.EQ("_id", ObjectId.Parse(mainapp.bandedGroupGridView.GetRowCellValue(mainapp.bandedGroupGridView.FocusedRowHandle, "_id").ToString())),
+            Gebase.GetCollection<groupcolls>("groups").Update(
+                Query.EQ("_id", ObjectId.Parse(_mainapp.bandedGroupGridView.GetRowCellValue(_mainapp.bandedGroupGridView.FocusedRowHandle, "_id").ToString())),
                 MongoDB.Driver.Builders.Update
                 .Set("teacher", textEditGteacher.Text)
                 .Set("number", textEditGnum.Text)
@@ -167,38 +167,31 @@ namespace gebase_0._2._2_alpha
                 .Set("sattime", sattime.Time.ToShortTimeString())
                 );
 
-            groupcode.GroupGridRefresh(mainapp);
-            mainapp.bandedGroupGridView.FocusedRowHandle = gebase_0._2._2_alpha.Properties.Settings.Default.GroupSelectedRowIndex;
-            mainapp.StatusEventsText.Caption = "Group " + textEditGnum.Text.ToString() + " edited";
-            mainapp.StatusEventsText.Visibility = DevExpress.XtraBars.BarItemVisibility.Always;
-            this.Close();
+            groupcode.GroupGridRefresh(_mainapp);
+            _mainapp.bandedGroupGridView.FocusedRowHandle = Properties.Settings.Default.GroupSelectedRowIndex;
+            _mainapp.StatusEventsText.Caption = @"Group " + textEditGnum.Text + @" edited";
+            _mainapp.StatusEventsText.Visibility = DevExpress.XtraBars.BarItemVisibility.Always;
+            Close();
         }
 
         private void NewGroupNumber()
         {
-            string oldfullnum;
-            string newfullnum;
-            int firsthalfoldnum;
-            int firsthalfnewnum;
-            string lasthalfoldnum;
-            int index;
-
-                var query = Query.Exists("number");
-                int notnull = Convert.ToInt16(groupcollection.FindAll().Count());
+            Query.Exists("number");
+                int notnull = Convert.ToInt16(_groupcollection.FindAll().Count());
                 var sortDescending = SortBy.Descending("number");
 
                 if (notnull > 0)
                 {
-                    var maxresult = groupcollection.FindAll()
+                    var maxresult = _groupcollection.FindAll()
                          .SetFields(Fields.Include("number")) // include name field
                          .SetSortOrder(sortDescending).SetLimit(1).First();
 
-                    oldfullnum = maxresult.number;
-                    index = oldfullnum.IndexOf("-");
-                    firsthalfoldnum = Convert.ToInt16(oldfullnum.Substring(0, index));
-                    firsthalfnewnum = firsthalfoldnum + 1;
-                    lasthalfoldnum = oldfullnum.Substring(index + 1, 2);
-                    newfullnum = Convert.ToString(firsthalfnewnum) + "-" + lasthalfoldnum;
+                    string oldfullnum = maxresult.number;
+                    int index = oldfullnum.IndexOf("-", StringComparison.Ordinal);
+                    int firsthalfoldnum = Convert.ToInt16(oldfullnum.Substring(0, index));
+                    int firsthalfnewnum = firsthalfoldnum + 1;
+                    string lasthalfoldnum = oldfullnum.Substring(index + 1, 2);
+                    string newfullnum = Convert.ToString(firsthalfnewnum) + "-" + lasthalfoldnum;
 
                     textEditGnum.Text = newfullnum;
                 }
@@ -301,45 +294,46 @@ namespace gebase_0._2._2_alpha
                 groupkind = "sametime";
             }
             
-            int count = Convert.ToInt16(groupcollection.FindAs<groupcolls>(Query.EQ("number", textEditGnum.Text)).Count());
+            int count = Convert.ToInt16(_groupcollection.FindAs<groupcolls>(Query.EQ("number", textEditGnum.Text)).Count());
             if (count > 0)
             {
-                MessageBox.Show("Same group number exist!");
-                return;
+                MessageBox.Show(@"Same group number exist!");
             }
             else
             {
                 _groupentity = new groupcolls();
                 //stdcolls _stdnew = stdcode._stdentity;
 
-                _groupentity = new groupcolls();
+                _groupentity = new groupcolls
+                {
+                    teacher = textEditGteacher.Text,
+                    number = textEditGnum.Text,
+                    level = textEditGlevel.Text,
+                    days = textEditGdays.Text,
+                    hours = Convert.ToInt16(checkedhours.Text),
+                    start = textEditGstart.DateTime.ToShortDateString(),
+                    status = textEditGstatus.Text,
+                    time = gtime,
+                    kind = groupkind,
+                    suntime = suntime.Time.ToShortTimeString(),
+                    montime = montime.Time.ToShortTimeString(),
+                    tuetime = tuetime.Time.ToShortTimeString(),
+                    wedtime = wedtime.Time.ToShortTimeString(),
+                    thutime = thutime.Time.ToShortTimeString(),
+                    fritime = fritime.Time.ToShortTimeString(),
+                    sattime = sattime.Time.ToShortTimeString()
+                };
                 //{
-                    _groupentity.teacher = textEditGteacher.Text;
-                    _groupentity.number = textEditGnum.Text;
-                    _groupentity.level = textEditGlevel.Text;
-                    _groupentity.days = textEditGdays.Text;
-                    _groupentity.hours = Convert.ToInt16(checkedhours.Text);
-                    _groupentity.start = textEditGstart.DateTime.ToShortDateString();
-                    _groupentity.status = textEditGstatus.Text;
-                    _groupentity.time = gtime;
-                    _groupentity.kind = groupkind;
-                    _groupentity.suntime = suntime.Time.ToShortTimeString();
-                    _groupentity.montime = montime.Time.ToShortTimeString();
-                    _groupentity.tuetime = tuetime.Time.ToShortTimeString();
-                    _groupentity.wedtime = wedtime.Time.ToShortTimeString();
-                    _groupentity.thutime = thutime.Time.ToShortTimeString();
-                    _groupentity.fritime = fritime.Time.ToShortTimeString();
-                    _groupentity.sattime = sattime.Time.ToShortTimeString();
                 //};
 
-                groupcollection.Insert(_groupentity);
-                groupcode.GroupGridRefresh(mainapp);
+                _groupcollection.Insert(_groupentity);
+                groupcode.GroupGridRefresh(_mainapp);
                 
-                mainapp.bandedGroupGridView.FocusedRowHandle = gebase_0._2._2_alpha.Properties.Settings.Default.GroupSelectedRowIndex;
-                mainapp.StatusEventsText.Caption = "Group " + textEditGnum.Text.ToString() + " created";
-                mainapp.StatusEventsText.Visibility = DevExpress.XtraBars.BarItemVisibility.Always;
+                _mainapp.bandedGroupGridView.FocusedRowHandle = Properties.Settings.Default.GroupSelectedRowIndex;
+                _mainapp.StatusEventsText.Caption = @"Group " + textEditGnum.Text + @" created";
+                _mainapp.StatusEventsText.Visibility = DevExpress.XtraBars.BarItemVisibility.Always;
                 //groupcode.StatusTextRefresh(mainapp);
-                this.Close();
+                Close();
             }
         }
 
@@ -365,31 +359,31 @@ namespace gebase_0._2._2_alpha
         {
             if (suntime.Enabled)
             {
-                suntime.Time = Convert.ToDateTime(mainapp.bandedGroupGridView.GetRowCellValue(mainapp.bandedGroupGridView.FocusedRowHandle, "suntime").ToString());
+                suntime.Time = Convert.ToDateTime(_mainapp.bandedGroupGridView.GetRowCellValue(_mainapp.bandedGroupGridView.FocusedRowHandle, "suntime").ToString());
             }
             if (montime.Enabled)
             {
-                montime.Time = Convert.ToDateTime(mainapp.bandedGroupGridView.GetRowCellValue(mainapp.bandedGroupGridView.FocusedRowHandle, "montime").ToString());
+                montime.Time = Convert.ToDateTime(_mainapp.bandedGroupGridView.GetRowCellValue(_mainapp.bandedGroupGridView.FocusedRowHandle, "montime").ToString());
             }
             if (tuetime.Enabled)
             {
-                tuetime.Time = Convert.ToDateTime(mainapp.bandedGroupGridView.GetRowCellValue(mainapp.bandedGroupGridView.FocusedRowHandle, "tuetime").ToString());
+                tuetime.Time = Convert.ToDateTime(_mainapp.bandedGroupGridView.GetRowCellValue(_mainapp.bandedGroupGridView.FocusedRowHandle, "tuetime").ToString());
             }
             if (wedtime.Enabled)
             {
-                wedtime.Time = Convert.ToDateTime(mainapp.bandedGroupGridView.GetRowCellValue(mainapp.bandedGroupGridView.FocusedRowHandle, "wedtime").ToString());
+                wedtime.Time = Convert.ToDateTime(_mainapp.bandedGroupGridView.GetRowCellValue(_mainapp.bandedGroupGridView.FocusedRowHandle, "wedtime").ToString());
             }
             if (thutime.Enabled)
             {
-                thutime.Time = Convert.ToDateTime(mainapp.bandedGroupGridView.GetRowCellValue(mainapp.bandedGroupGridView.FocusedRowHandle, "thutime").ToString());
+                thutime.Time = Convert.ToDateTime(_mainapp.bandedGroupGridView.GetRowCellValue(_mainapp.bandedGroupGridView.FocusedRowHandle, "thutime").ToString());
             }
             if (fritime.Enabled)
             {
-                fritime.Time = Convert.ToDateTime(mainapp.bandedGroupGridView.GetRowCellValue(mainapp.bandedGroupGridView.FocusedRowHandle, "fritime").ToString());
+                fritime.Time = Convert.ToDateTime(_mainapp.bandedGroupGridView.GetRowCellValue(_mainapp.bandedGroupGridView.FocusedRowHandle, "fritime").ToString());
             }
             if (sattime.Enabled)
             {
-                sattime.Time = Convert.ToDateTime(mainapp.bandedGroupGridView.GetRowCellValue(mainapp.bandedGroupGridView.FocusedRowHandle, "sattime").ToString());
+                sattime.Time = Convert.ToDateTime(_mainapp.bandedGroupGridView.GetRowCellValue(_mainapp.bandedGroupGridView.FocusedRowHandle, "sattime").ToString());
             }
         }
     }

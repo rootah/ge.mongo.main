@@ -73,9 +73,9 @@ namespace gebase_0._2._2_alpha
                     break;
                 case 1:
                     {
-                        stdcode.MongoInitiate(this);
-                        stdcode.StdTabShow(this);
-                        stdcode.StdGridColHide(this);
+                        Stdcode.MongoInitiate(this);
+                        Stdcode.StdTabShow(this);
+                        Stdcode.StdGridColHide(this);
                         bandedStudentsGridView.FocusedRowHandle = 0;
                         bandedStudentsGridView_FocusedRowChanged(null, null);
                     }
@@ -187,7 +187,7 @@ namespace gebase_0._2._2_alpha
         private void AddGroupButton_ItemClick(object sender, ItemClickEventArgs e)
         {
             Properties.Settings.Default.GroupFormType = "add";
-            using (var groupadd = new groupform(this) { StartPosition = FormStartPosition.CenterParent })
+            using (var groupadd = new Groupform(this) { StartPosition = FormStartPosition.CenterParent })
             {
                 groupadd.simpleButtonOk.Visible = true;
                 groupadd.simpleButtonEdit.Visible = false;
@@ -198,7 +198,7 @@ namespace gebase_0._2._2_alpha
         private void EditGroupButton_ItemClick(object sender, ItemClickEventArgs e)
         {
             Properties.Settings.Default.GroupFormType = "edit";
-            using (var groupadd = new groupform(this) { StartPosition = FormStartPosition.CenterParent })
+            using (var groupadd = new Groupform(this) { StartPosition = FormStartPosition.CenterParent })
             {
                 groupadd.simpleButtonOk.Visible = true;
                 groupadd.simpleButtonEdit.Visible = false;
@@ -239,7 +239,7 @@ namespace gebase_0._2._2_alpha
         private void AddStudentsButton_ItemClick(object sender, ItemClickEventArgs e)
         {
             Properties.Settings.Default.StdFormType = "add";
-            var stdadd = new stdform(this) {StartPosition = FormStartPosition.CenterParent};
+            var stdadd = new Stdform(this) {StartPosition = FormStartPosition.CenterParent};
             stdadd.Text = stdadd.Text + @" [new]";
             stdadd.ShowDialog();
         }
@@ -249,32 +249,32 @@ namespace gebase_0._2._2_alpha
             if (MessageBox.Show(@"Really delete?", @"Confirm delete", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 string id = bandedStudentsGridView.GetRowCellValue(bandedStudentsGridView.FocusedRowHandle, "_id").ToString();
-                stdcode.StdRemove(this, id);
+                Stdcode.StdRemove(this, id);
             }
         }
 
         private void PauseStudentButton_ItemClick(object sender, ItemClickEventArgs e)
         {
             string id = bandedStudentsGridView.GetRowCellValue(bandedStudentsGridView.FocusedRowHandle, "_id").ToString();
-            stdcode.StdActionButton(this, id, "paused");
+            Stdcode.StdActionButton(this, id, "paused");
         }
 
         private void ResumeStudentButton_ItemClick(object sender, ItemClickEventArgs e)
         {
             string id = bandedStudentsGridView.GetRowCellValue(bandedStudentsGridView.FocusedRowHandle, "_id").ToString();
-            stdcode.StdActionButton(this, id, "active");
+            Stdcode.StdActionButton(this, id, "active");
         }
 
         private void StartStudentButton_ItemClick(object sender, ItemClickEventArgs e)
         {
             string id = bandedStudentsGridView.GetRowCellValue(bandedStudentsGridView.FocusedRowHandle, "_id").ToString();
-            stdcode.StdActionButton(this, id, "active");
+            Stdcode.StdActionButton(this, id, "active");
         }
 
         private void FinishStudentButton_ItemClick(object sender, ItemClickEventArgs e)
         {
             string id = bandedStudentsGridView.GetRowCellValue(bandedStudentsGridView.FocusedRowHandle, "_id").ToString();
-            stdcode.StdActionButton(this, id, "finished");
+            Stdcode.StdActionButton(this, id, "finished");
         }
 
         private void ActiveStudentsButton_DownChanged(object sender, ItemClickEventArgs e)
@@ -282,7 +282,7 @@ namespace gebase_0._2._2_alpha
             Properties.Settings.Default.StdFilterFlag = "active";
             Properties.Settings.Default.Save();
 
-            stdcode.StdGridRefresh(this);
+            Stdcode.StdGridRefresh(this);
             bandedStudentsGridView_FocusedRowChanged(null, null);
         }
 
@@ -291,7 +291,7 @@ namespace gebase_0._2._2_alpha
             Properties.Settings.Default.StdFilterFlag = "paused";
             Properties.Settings.Default.Save();
 
-            stdcode.StdGridRefresh(this);
+            Stdcode.StdGridRefresh(this);
             bandedStudentsGridView_FocusedRowChanged(null, null);
         }
 
@@ -300,7 +300,7 @@ namespace gebase_0._2._2_alpha
             Properties.Settings.Default.StdFilterFlag = "awaiting";
             Properties.Settings.Default.Save();
 
-            stdcode.StdGridRefresh(this);
+            Stdcode.StdGridRefresh(this);
             bandedStudentsGridView_FocusedRowChanged(null, null);
         }
 
@@ -309,14 +309,14 @@ namespace gebase_0._2._2_alpha
             Properties.Settings.Default.StdFilterFlag = "finished";
             Properties.Settings.Default.Save();
 
-            stdcode.StdGridRefresh(this);
+            Stdcode.StdGridRefresh(this);
             bandedStudentsGridView_FocusedRowChanged(null, null);
         }
 
         private void EditStudentButton_ItemClick(object sender, ItemClickEventArgs e)
         {
             Properties.Settings.Default.StdFormType = "edit";
-            var stdadd = new stdform(this) {StartPosition = FormStartPosition.CenterParent};
+            var stdadd = new Stdform(this) {StartPosition = FormStartPosition.CenterParent};
             stdadd.Text = stdadd.Text + @" [edit]";
             
             stdadd.ShowDialog();
@@ -327,7 +327,7 @@ namespace gebase_0._2._2_alpha
             try
             {
                 string status = bandedStudentsGridView.GetRowCellValue(bandedStudentsGridView.FocusedRowHandle, "status").ToString();
-                stdcode.StdActionButtonsSwitch(this, status);
+                Stdcode.StdActionButtonsSwitch(this, status);
             }
             catch
             {
@@ -369,7 +369,7 @@ namespace gebase_0._2._2_alpha
                 EditGroupButton.Enabled = false;
             }
 
-            stdcode.GroupDetails(this);
+            Stdcode.GroupDetails(this);
         }
 
         public void DetailGroupButton_DownChanged(object sender, ItemClickEventArgs e)

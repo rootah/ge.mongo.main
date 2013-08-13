@@ -1,29 +1,31 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Linq;
+using DevExpress.XtraEditors.Controls;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
 
 namespace gebase_0._2._2_alpha
 {
-    class stdcode
+    static class Stdcode
     {
-        public static string connectionString;
-        public static MongoClient client;
-        public static MongoServer server;
-        public static MongoDatabase gebase;
-        public static MongoCollection<stdcoll> stdcollection;
+        private static string _connectionString;
+        private static MongoClient _client;
+        private static MongoServer _server;
+        public static MongoDatabase Gebase;
+        public static MongoCollection<stdcoll> Stdcollection;
 
+// ReSharper disable once InconsistentNaming
         public static stdcoll _stdentity;
 
         public static void MongoInitiate(MainAppForm mainapp)
         {
-            connectionString = gebase_0._2._2_alpha.Properties.Settings.Default.ServerOne/* + "," + Properties.Settings.Default.ServerTwo + "/?connect=replicaset"*/;
-            client = new MongoClient(connectionString);
-            server = client.GetServer();
-            gebase = server.GetDatabase("gebase");
-            stdcollection = gebase.GetCollection<stdcoll>("stds");
+            _connectionString = Properties.Settings.Default.ServerOne/* + "," + Properties.Settings.Default.ServerTwo + "/?connect=replicaset"*/;
+            _client = new MongoClient(_connectionString);
+            _server = _client.GetServer();
+            Gebase = _server.GetDatabase("gebase");
+            Stdcollection = Gebase.GetCollection<stdcoll>("stds");
 
             StdGridRefresh(mainapp);
         }
@@ -32,13 +34,13 @@ namespace gebase_0._2._2_alpha
         {
             //if (mainapp.bandedStudentsGridView.RowCount > 0)
             //{
-                var query = Query.EQ("status", gebase_0._2._2_alpha.Properties.Settings.Default.StdFilterFlag);
+                var query = Query.EQ("status", Properties.Settings.Default.StdFilterFlag);
 
-                BindingList<stdcoll> stdresult = new BindingList<stdcoll>(stdcollection.Find(query).ToList());
+                var stdresult = new BindingList<stdcoll>(Stdcollection.Find(query).ToList());
                 mainapp.gridStudents.DataSource = stdresult;
 
                 int count = Convert.ToInt16(stdresult.Count());
-                mainapp.ItemsCountStatusText.Caption = Convert.ToString(gebase_0._2._2_alpha.Properties.Settings.Default.StdFilterFlag) + " students count: " + Convert.ToString(count);
+                mainapp.ItemsCountStatusText.Caption = Convert.ToString(Properties.Settings.Default.StdFilterFlag) + @" students count: " + Convert.ToString(count);
             //}
             //else
             //{
@@ -47,9 +49,9 @@ namespace gebase_0._2._2_alpha
             //}
         }
 
-        public static void GroupComboListFill(stdform stdform)
+        public static void GroupComboListFill(Stdform stdform)
         {
-            MongoCollection<groupcolls> groupcoll = gebase.GetCollection<groupcolls>("groups");
+            MongoCollection<groupcolls> groupcoll = Gebase.GetCollection<groupcolls>("groups");
 
             var result = groupcoll.FindAll()
                  .SetFields(Fields.Include("number"))
@@ -60,47 +62,50 @@ namespace gebase_0._2._2_alpha
             stdform.stgroup.Properties.ValueMember = "number";
             stdform.stgroup.Properties.ShowHeader = false;
 
-            DevExpress.XtraEditors.Controls.LookUpColumnInfo col;
-            col = new DevExpress.XtraEditors.Controls.LookUpColumnInfo("number", 25);
-            col.SortOrder = DevExpress.Data.ColumnSortOrder.Ascending;
+            var col = new LookUpColumnInfo("number", 25)
+            {
+                SortOrder = DevExpress.Data.ColumnSortOrder.Ascending
+            };
 
             stdform.stgroup.Properties.Columns.Add(col);
         }
         
-        public static void StdRemove(MainAppForm mainapp, string _id)
+        public static void StdRemove(MainAppForm mainapp, string id)
         {
-            stdcollection.Remove(
-                Query.EQ("_id", ObjectId.Parse(_id)));
+            Stdcollection.Remove(
+                Query.EQ("_id", ObjectId.Parse(id)));
             StdGridRefresh(mainapp);
         }
 
-        public static void StdPause(MainAppForm mainapp, string _id)
+// ReSharper disable once UnusedMember.Global
+        public static void StdPause(MainAppForm mainapp, string id)
         {
-            stdcollection.Update(Query.EQ("_id", ObjectId.Parse(_id)), 
-                MongoDB.Driver.Builders.Update.Set("status", "paused"));
-
-            StdGridRefresh(mainapp);
-        }
-
-        public static void StdResume(MainAppForm mainapp, string _id)
-        {
-            stdcollection.Update(Query.EQ("_id", ObjectId.Parse(_id)),
-                MongoDB.Driver.Builders.Update.Set("status", "active"));
+            Stdcollection.Update(Query.EQ("_id", ObjectId.Parse(id)), 
+                Update.Set("status", "paused"));
 
             StdGridRefresh(mainapp);
         }
 
-        public static void StdActionButton(MainAppForm mainapp, string _id, string status)
+// ReSharper disable once UnusedMember.Global
+        public static void StdResume(MainAppForm mainapp, string id)
         {
-            stdcollection.Update(Query.EQ("_id", ObjectId.Parse(_id)),
-                MongoDB.Driver.Builders.Update.Set("status", status));
+            Stdcollection.Update(Query.EQ("_id", ObjectId.Parse(id)),
+                Update.Set("status", "active"));
+
+            StdGridRefresh(mainapp);
+        }
+
+        public static void StdActionButton(MainAppForm mainapp, string id, string status)
+        {
+            Stdcollection.Update(Query.EQ("_id", ObjectId.Parse(id)),
+                Update.Set("status", status));
 
             StdGridRefresh(mainapp);
         }
 
         public static void StdTabShow(MainAppForm mainapp)
         {
-            switch (gebase_0._2._2_alpha.Properties.Settings.Default.StdFilterFlag)
+            switch (Properties.Settings.Default.StdFilterFlag)
             {
                 case "active":
                     mainapp.ActiveStudentsButton.Down = true;
@@ -173,32 +178,32 @@ namespace gebase_0._2._2_alpha
 
         public static void GroupDetails(MainAppForm mainapp)
         {
-            connectionString = gebase_0._2._2_alpha.Properties.Settings.Default.ServerOne/* + "," + Properties.Settings.Default.ServerTwo + "/?connect=replicaset"*/;
-            client = new MongoClient(connectionString);
-            server = client.GetServer();
-            gebase = server.GetDatabase("gebase");
-
-            string paneltext;
+            _connectionString = Properties.Settings.Default.ServerOne/* + "," + Properties.Settings.Default.ServerTwo + "/?connect=replicaset"*/;
+            _client = new MongoClient(_connectionString);
+            _server = _client.GetServer();
+            Gebase = _server.GetDatabase("gebase");
 
             try
             {
-                string number = gebase_0._2._2_alpha.Properties.Settings.Default.CurrentGroupNumber;
-                
+                string number = Properties.Settings.Default.CurrentGroupNumber;
+
+                string paneltext;
                 if (number == "")
                     paneltext = "nothing selected";
                 else paneltext = "group " + number + " details";
 
                 mainapp.bandedDetailGroupGridView.GroupPanelText = paneltext;
 
-                stdcollection = gebase.GetCollection<stdcoll>("stds");
+                Stdcollection = Gebase.GetCollection<stdcoll>("stds");
                 var query = Query.EQ("group", number);
 
-                BindingList<stdcoll> stddetails = new BindingList<stdcoll>(stdcollection.Find(query).ToList());
+                var stddetails = new BindingList<stdcoll>(Stdcollection.Find(query).ToList());
                 mainapp.gridGroupDetail.DataSource = stddetails;
             }
-            catch
+            catch (Exception)
             {
-                
+                const string paneltext = @"nothing selected";
+                mainapp.bandedDetailGroupGridView.GroupPanelText = paneltext;
             }
         }
     }
